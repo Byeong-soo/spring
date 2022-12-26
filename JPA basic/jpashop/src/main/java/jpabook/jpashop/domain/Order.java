@@ -7,7 +7,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
-public class Order {
+public class Order extends BaseEntity{
     @Id @GeneratedValue
     @Column(name = "ORDER_ID")
     private Long id;
@@ -18,8 +18,18 @@ public class Order {
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
+    @OneToOne
+    @JoinColumn(name = "DELIVERY_ID")
+    private Delivery delivery;
+
+
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    private LocalDateTime orderDate;
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
 
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
@@ -34,9 +44,6 @@ public class Order {
         this.member = member;
     }
 
-    private LocalDateTime orderDate;
-    @Enumerated(EnumType.STRING)
-    private OrderStatus status;
 
     public Long getId() {
         return id;
